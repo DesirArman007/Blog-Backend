@@ -32,6 +32,14 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "verification_expiration")
+    private LocalDateTime verificationCodeExpiresAt;
+
+    @Column(nullable = false)
+    private boolean enabled;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
