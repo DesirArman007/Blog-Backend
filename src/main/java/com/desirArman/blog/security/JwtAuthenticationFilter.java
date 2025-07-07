@@ -49,7 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
         } catch (Exception exception){
-            log.warn("Recieved Invaild auth Token");
+            log.warn("Received Invalid auth Token: {}", exception.getMessage());
+            log.debug("Token validation exception stack trace", exception);
         }
 
         filterChain.doFilter(request,response);

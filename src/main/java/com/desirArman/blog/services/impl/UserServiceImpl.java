@@ -199,7 +199,6 @@ public class UserServiceImpl implements UserService {
                 "anonymousUser".equals(authentication.getPrincipal())) {
             throw new EntityNotFoundException("No authenticated user found");
         }
-
         BlogUserDetails userDetails = (BlogUserDetails) authentication.getPrincipal();
         return userDetails.getUser(); // Fully authenticated User object
     }
