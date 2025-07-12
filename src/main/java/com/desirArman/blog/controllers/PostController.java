@@ -4,6 +4,7 @@ import com.desirArman.blog.domain.CreatePostRequest;
 import com.desirArman.blog.domain.UpdatePostRequest;
 import com.desirArman.blog.domain.dtos.CreatePostRequestDto;
 import com.desirArman.blog.domain.dtos.PostDto;
+import com.desirArman.blog.domain.dtos.PostSearchRequestDto;
 import com.desirArman.blog.domain.dtos.UpdatePostRequestDto;
 import com.desirArman.blog.domain.entities.Post;
 import com.desirArman.blog.domain.entities.User;
@@ -90,4 +91,13 @@ public class PostController {
         postService.deletePost(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(path = "/myPosts")
+    public ResponseEntity<List<PostDto>> getMyPublishedPosts(@RequestAttribute UUID userId){
+        User loggedInUser = userService.getUserById(userId);
+        List<Post> userPosts = postService.getUserPosts(loggedInUser);
+        List<PostDto> userPostsDto = userPosts.stream().map(post->postMapper.toDto(post)).toList();
+        return ResponseEntity.ok(userPostsDto);
+    }
+
 }

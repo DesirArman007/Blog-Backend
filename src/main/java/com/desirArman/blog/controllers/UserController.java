@@ -40,7 +40,6 @@ public class UserController {
         User user = userService.getUserByEmail(email);
         CreateUserResponseDto dto = userMapper.toDto(user);
         return ResponseEntity.ok(dto);
-
     }
 
     @DeleteMapping(path = "/delete/{id}")

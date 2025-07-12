@@ -3,19 +3,25 @@ package com.desirArman.blog.services.impl;
 import com.desirArman.blog.domain.CreatePostRequest;
 import com.desirArman.blog.domain.PostStatus;
 import com.desirArman.blog.domain.UpdatePostRequest;
+import com.desirArman.blog.domain.dtos.PostSearchRequestDto;
 import com.desirArman.blog.domain.entities.Category;
 import com.desirArman.blog.domain.entities.Post;
 import com.desirArman.blog.domain.entities.Tag;
 import com.desirArman.blog.domain.entities.User;
 import com.desirArman.blog.repositories.PostRepository;
+import com.desirArman.blog.security.BlogUserDetails;
 import com.desirArman.blog.services.CategoryService;
 import com.desirArman.blog.services.PostService;
 import com.desirArman.blog.services.TagService;
 import com.desirArman.blog.services.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -132,13 +138,35 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPost(UUID id) {
-        return postRepository.findById(id)
+        return postRepository.findByIdWithAuthor(id)
                 .orElseThrow(()-> new EntityNotFoundException("Post not found with id: "+id));
     }
 
     @Override
     public void deletePost(UUID id) {
+        UUID currentUserId = getCurrentUserId();
         Post post = getPost(id);
+        if (!post.getAuthor().getId().equals(currentUserId)) {
+            throw new AccessDeniedException("You are not allowed to delete another user's post.");
+        }
          postRepository.deleteById(id); ;
     }
+
+    private UUID getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        BlogUserDetails userDetails = (BlogUserDetails) authentication.getPrincipal();
+        return userDetails.getId(); // Assuming BlogUserDetails has a getId() method returning UUID
+    }
+
+    @Override
+    public List<Post> getUserPosts(User user) {
+        return postRepository.findAllByAuthorAndStatus(user, PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public Post getPostById(UUID postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id: " + postId));
+    }
+
 }

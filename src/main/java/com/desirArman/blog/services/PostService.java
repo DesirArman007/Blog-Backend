@@ -2,6 +2,7 @@ package com.desirArman.blog.services;
 
 import com.desirArman.blog.domain.CreatePostRequest;
 import com.desirArman.blog.domain.UpdatePostRequest;
+import com.desirArman.blog.domain.dtos.PostSearchRequestDto;
 import com.desirArman.blog.domain.entities.Post;
 import com.desirArman.blog.domain.entities.User;
 
@@ -20,4 +21,10 @@ public interface PostService {
     Post updatePost(UUID id, UpdatePostRequest updatePostRequest);
 
     public void deletePost(UUID id);
+
+    List<Post> getUserPosts(User user);
+
+    Post getPostById(UUID postId);
+
+    List<Post> searchPosts(PostSearchRequestDto requestDto);
 }

@@ -1,12 +1,12 @@
 package com.desirArman.blog.domain.dtos;
 
-import com.desirArman.blog.domain.PostStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,18 +14,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostDto {
+public class LikeDto {
 
     private UUID id;
-    private String title;
-    private String content;
+
     private AuthorDto author;
-    private CategoryDto category;
-    private Set<TagDto> tags;
-    private Integer readingTime;
+
+    private UUID postId;
+
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private PostStatus status;
-    int likeCount;
-    boolean likedByCurrentUser;
+
+
+
 }
