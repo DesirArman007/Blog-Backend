@@ -34,7 +34,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private Long jwtExpiryMs;
 
 
-
     @Override
     public UserDetails authenticate(String email, String password) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));

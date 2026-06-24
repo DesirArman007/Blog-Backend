@@ -7,6 +7,7 @@ import com.desirArman.blog.mapper.UserMapper;
 import com.desirArman.blog.security.BlogUserDetails;
 import com.desirArman.blog.services.AuthenticationService;
 import com.desirArman.blog.services.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AuthController {
 
 
     @PostMapping(path = "/signup")
-    private ResponseEntity<CreateUserResponseDto> registerUser(@RequestBody CreateUserDto createUserDto){
+    private ResponseEntity<CreateUserResponseDto> registerUser(@Valid @RequestBody CreateUserDto createUserDto){
         User registerUser = userService.signUp(createUserDto);
         CreateUserResponseDto registerUserDto = userMapper.toDto(registerUser);
         return new ResponseEntity<>(registerUserDto, HttpStatus.CREATED);

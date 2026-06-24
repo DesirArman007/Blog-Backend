@@ -4,10 +4,7 @@ import com.desirArman.blog.domain.CreatePostRequest;
 import com.desirArman.blog.domain.PostStatus;
 import com.desirArman.blog.domain.UpdatePostRequest;
 import com.desirArman.blog.domain.dtos.PostSearchRequestDto;
-import com.desirArman.blog.domain.entities.Category;
-import com.desirArman.blog.domain.entities.Post;
-import com.desirArman.blog.domain.entities.Tag;
-import com.desirArman.blog.domain.entities.User;
+import com.desirArman.blog.domain.entities.*;
 import com.desirArman.blog.repositories.PostRepository;
 import com.desirArman.blog.security.BlogUserDetails;
 import com.desirArman.blog.services.CategoryService;
@@ -23,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -74,24 +72,51 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 
-    @Override
+//    @Override
+//    @Transactional
+//    public Post createPost(User user, CreatePostRequest createPostRequest) {
+//        List<String> photoIds= createPostRequest.getPhotoIds();
+//        List<Photo> photos= photoIds.stream().map(photoUrl -> Photo.builder()
+//                .url(photoUrl)
+//                .uploadDate(LocalDateTime.now())
+//                .build()).toList();
+//        Post newPost = new Post();
+//            newPost.setTitle(createPostRequest.getTitle());
+//            newPost.setContent(createPostRequest.getContent());
+//            newPost.setStatus(createPostRequest.getStatus());
+//            newPost.setAuthor(user);
+//            newPost.setReadingTime(calculateReadingTime(createPostRequest.getContent()));
+//
+//            Category category = categoryService.getCategoryById(createPostRequest.getCategoryId());
+//            newPost.setCategory(category);
+//
+//            Set<UUID> tagIds = createPostRequest.getTagIds();
+//            List<Tag> tags = tagService.getTagsById(tagIds);
+//            newPost.setTags(new HashSet<>(tags));
+//
+//            return postRepository.save(newPost);
+//    }
+
     @Transactional
+    @Override
     public Post createPost(User user, CreatePostRequest createPostRequest) {
+
         Post newPost = new Post();
-            newPost.setTitle(createPostRequest.getTitle());
-            newPost.setContent(createPostRequest.getContent());
-            newPost.setStatus(createPostRequest.getStatus());
-            newPost.setAuthor(user);
-            newPost.setReadingTime(calculateReadingTime(createPostRequest.getContent()));
+        newPost.setTitle(createPostRequest.getTitle());
+        newPost.setContent(createPostRequest.getContent());
+        newPost.setStatus(createPostRequest.getStatus());
+        newPost.setAuthor(user);
+        newPost.setReadingTime(calculateReadingTime(createPostRequest.getContent()));
 
-            Category category = categoryService.getCategoryById(createPostRequest.getCategoryId());
-            newPost.setCategory(category);
+        Category category = categoryService.getCategoryById(createPostRequest.getCategoryId());
+        newPost.setCategory(category);
 
-            Set<UUID> tagIds = createPostRequest.getTagIds();
-            List<Tag> tags = tagService.getTagsById(tagIds);
-            newPost.setTags(new HashSet<>(tags));
+        Set<UUID> tagIds = createPostRequest.getTagIds();
+        List<Tag> tags = tagService.getTagsById(tagIds);
+        newPost.setTags(new HashSet<>(tags));
 
-            return postRepository.save(newPost);
+
+        return postRepository.save(newPost);
     }
 
     @Override
@@ -167,6 +192,11 @@ public class PostServiceImpl implements PostService {
     public Post getPostById(UUID postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("Post not found with id: " + postId));
+    }
+
+    @Override
+    public List<Post> searchPosts(PostSearchRequestDto requestDto) {
+        return List.of();
     }
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,4 +22,6 @@ public class CreatePostRequest {
     @Builder.Default
     private Set<UUID> tagIds = new HashSet<>();
     private PostStatus status;
+    private List<String> photoIds;
+
 }

@@ -5,10 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Table(name = "posts")
@@ -44,6 +41,12 @@ public class Post {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
+
+//    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Photo> photos = new ArrayList<>();
+
+
+
     @ManyToMany
     @JoinTable(
             name = "post_tags",
@@ -76,6 +79,7 @@ public class Post {
         this.createdAt=now;
         this.updatedAt=now;
     }
+
 
     @PreUpdate
     protected void onUpdate(){

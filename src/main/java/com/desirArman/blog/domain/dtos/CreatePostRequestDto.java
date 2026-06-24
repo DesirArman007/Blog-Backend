@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,7 +24,7 @@ public class CreatePostRequestDto {
     private String title;
 
     @NotBlank(message = "Content is required")
-    @Size(min = 2, max = 298, message = "Content must be in between {min} and {max} characters")
+    @Size(min = 2, max = 5000, message = "Content must be in between {min} and {max} characters")
     private String content;
 
     @NotNull(message = "Category Id is required")
@@ -35,4 +36,7 @@ public class CreatePostRequestDto {
 
     @NotNull(message = "Status is Required")
     private PostStatus status;
+
+    @Size(min=0, message = "At least one photo ID is required ")
+    private List<String> photoIds;
 }
